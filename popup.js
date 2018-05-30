@@ -1,4 +1,10 @@
-let changeColor = document.getElementById('changeColor');
+// Popup script - popup.js
+// Functionality for turning on/off extension
+// By: Sean Miller
+// 2018-05-24
+
+
+let turnOnOrOff = document.getElementById('turnOnOrOff');
 
 chrome.storage.sync.get('color', function(data) {
   changeColor.style.backgroundColor = data.color;
