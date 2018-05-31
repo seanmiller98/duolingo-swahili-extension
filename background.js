@@ -37,3 +37,9 @@ var observer = new MutationObserver(callback);
 
 // Start observing the target node for configured mutations
 observer.observe(targetNode, config);
+
+
+const sentenceXPath = '/span[@data-test="hint-sentence"]';
+
+// get text from sentence
+// const sentence = document.evaluate(sentenceXPath, document, )
