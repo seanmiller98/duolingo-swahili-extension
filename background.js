@@ -12,8 +12,7 @@ chrome.runtime.onInstalled.addListener(function () {
   });
 });
 
-// some random class ID created by Duolingo for the main
-// testing field
+// some random class created by Duolingo for the main testing field
 const targetNode = document.getElementsByClassName('_1gcJT _2hYEZ');
 
 const config = {
