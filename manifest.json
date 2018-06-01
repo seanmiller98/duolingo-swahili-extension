@@ -17,7 +17,7 @@
     "page_action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "128": "images/kenya128.ico"
+            "128": "images/kenya128.png"
         }
     },
     "content_scripts": [
@@ -27,10 +27,10 @@
                 "http://www.duolingo.com/skill/sw/*"
             ],
             "js": [
-                "heart.min.js"
+                "background.js"
             ],
             "css": [
-                "heart.min.css"
+                "web-extension.css"
             ]
         }
     ],
