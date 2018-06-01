@@ -8,12 +8,7 @@
         "declarativeContent",
         "storage"
     ],
-    "background": {
-        "scripts": [
-            "parse-sentence.js"
-        ],
-        "persistent": false
-    },
+    "background": "popup.html",
     "page_action": {
         "default_popup": "popup.html",
         "default_icon": {
@@ -35,7 +30,7 @@
         }
     ],
     "icons": {
-        "128": "images/get_started128.png"
+        "128": "images/kenya128.png"
     },
     "manifest_version": 2
 }

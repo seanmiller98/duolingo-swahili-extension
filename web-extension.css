@@ -1,21 +1,17 @@
-/* This is wear style sheets for the 
-   extension will live */
+/* Style sheets for the extension -- web-extension.css
+   File that include all styling for the extension
+   By: Sean Miller
+   2018-06-01 */
 
 #title {
     font-size: 24px;
     text-align: center;
-    /* margin: 0; */
-    /* padding: 0; */
     margin: 5% auto 0;
-    /* position: absolute; */
 }
 
 #logo {
-    /* width: 2px;
-    height: 2px; */
-    /* position: absolute; */
-    width: 64px;
-    height: 64px;
+    width: 50px;
+    height: 50px;
     margin: 15px auto 0;
     background: url(images/kenya128.png) no-repeat center;
     background-size: contain;
@@ -24,51 +20,50 @@
 #titlebox {
     margin: 0;
     padding: 0;
-    /* padding-top: 10% auto 0; */
-    /* margin-bottom: 20px; */
+}
+
+#seperator {
+    border: 2%;
 }
 
 #container {
     /* position: absolute; */
     width: 200px;
     font-family: 'Roboto', sans-serif;
-    /* height: auto; */
     margin: 0;
     padding: 0;
+    overflow: auto; 
+    height: auto;
 }
 
 .description {
     font-size: 14px;
-    ;
     font-family: 'Roboto', sans-serif;
     text-align: center;
-    /* margin: 0; */
-    /* padding: 0; */
     margin: 5% auto 0;
+    height: auto;
 }
 
-#enable {
-    position: relative;
-    float: right;
-    width: auto;
-    /* padding-right: 5%; */
+#options-container {
+    text-align: left;
+    line-height: 0;
+    clear: both;
+    font-size: 14px;
+    margin: 5% auto 0;
+    height: max-content;
+    overflow:hidden;
 }
 
 #options-description {
     position: relative;
     float: left;
-}
-
-#options {
-    position: relative;
-    text-align: left;
-    font-size: 14px;
-    padding: 5% auto 0;
+    height: 100%;
     /* width: max-content; */
-    max-width: 100%;
-    margin: 5% auto 0;
 }
 
-#toggle {
-    float: left;
+#enable {
+    position: relative;
+    float: right;
+    height: 100%;
+    margin-right: 0%;
 }
