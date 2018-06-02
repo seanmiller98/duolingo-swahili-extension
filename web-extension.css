@@ -6,13 +6,13 @@
 #title {
     font-size: 24px;
     text-align: center;
-    margin: 5% auto 0;
+    margin: 2% auto 0;
 }
 
 #logo {
     width: 50px;
     height: 50px;
-    margin: 15px auto 0;
+    margin: 5px auto 0;
     background: url(images/kenya128.png) no-repeat center;
     background-size: contain;
 }
@@ -27,12 +27,11 @@
 }
 
 #container {
-    /* position: absolute; */
     width: 200px;
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    overflow: auto; 
+    overflow: auto;
     height: auto;
 }
 
@@ -51,14 +50,14 @@
     font-size: 14px;
     margin: 5% auto 0;
     height: max-content;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 #options-description {
     position: relative;
     float: left;
     height: 100%;
-    /* width: max-content; */
+    margin: 14px auto 11px auto;
 }
 
 #enable {
@@ -67,3 +66,55 @@
     height: 100%;
     margin-right: 0%;
 }
+
+#toggle-container {
+    float: right;
+    height: auto;
+    margin-right: 2px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+}
+
+.switch > input {
+    display: none;
+}
+
+.toggle {
+    position: absolute;
+    border-radius: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .2s;
+    box-shadow: 0 0 0 #009933;
+}
+
+input:checked+.toggle {
+    background-color: #009933;
+}
+
+input:focus {
+    box-shadow: 0 0 0 #009933;
+}
+
+.toggle:before {
+    position: absolute;
+    content: "";
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    background-color: #E8E8E8;
+    transition: .2s;
+}
+
+input:checked + .toggle:before {
+    transform: translateX(20px);
+}
+
