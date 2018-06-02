@@ -80,7 +80,7 @@
     height: 24px;
 }
 
-.switch > input {
+.switch>input {
     display: none;
 }
 
@@ -114,7 +114,6 @@ input:focus {
     transition: .2s;
 }
 
-input:checked + .toggle:before {
+input:checked+.toggle:before {
     transform: translateX(20px);
 }
-
