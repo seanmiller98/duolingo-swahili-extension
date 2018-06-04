@@ -1,44 +1,41 @@
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ color: '#3aa757' }, function () {
-    console.log('The color is green.');
-  });
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: { hostEquals: 'duolingo.com/skill/sw/' },
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
-});
+// Background script -- background.js
+// Listens for mutations in the DOM and triggers the sentence 
+// parser if it senses a mutation
+// By: Sean Miller
+// 2018-06-03
 
-// some random class created by Duolingo for the main testing field
-const targetNode = document.getElementsByClassName('_1gcJT _2hYEZ');
 
-const config = {
+
+// Duolingo test field; this is where the test sentence is located in the DOM
+const targetNode = document.querySelector('span[data-test="hint-sentence"]');
+
+
+// // Parse the text of the element into its individual words, filtering
+// // out any whitespace and special characters
+// let sentence = targetNode.innerText;
+// sentence = sentence.toLowerCase();
+// sentence = sentence.replace(/[`~!@#$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');
+// sentence = sentence.split(/[\r\n]+/);
+// sentence = sentence.filter(function (word) {
+//   return (word !== "");
+// });
+
+// // We must trim the words once again to remove leading whitespace
+// for (let word = 0; word < sentence.length; word++) {
+//   sentence[word] = sentence[word].trim();
+// }
+
+var testContainer = document.querySelector('span[data-test="challenge challenge-translate"]');
+
+var config = {
   attributes: true,
   childList: true
 };
 
-const callback = function (mutationsList) {
-  // for (var mutation of mutationsList) {
-  //   if (mutation.type == 'childList') {
-  //     console.log('A child node has been added or removed.');
-  //   }
-  //   else if (mutation.type == 'attributes') {
-  //     console.log('The ' + mutation.attributeName + ' attribute was modified.');
-  //   }
-  // }
-};
-
 // Create an observer instance linked to the callback function
-var observer = new MutationObserver(callback);
+var observer = new MutationObserver(function (mutations) {
+  console.log('hi marc');
+});
 
 // Start observing the target node for configured mutations
 observer.observe(targetNode, config);
-
-
-const sentenceXPath = '/span[@data-test="hint-sentence"]';
-
-// get text from sentence
-// const sentence = document.evaluate(sentenceXPath, document, )
