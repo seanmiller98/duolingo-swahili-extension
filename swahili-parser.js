@@ -31,7 +31,7 @@ export class SwahiliParser {
     // check for the special n or m at the beginning of the word, which can get
     // its own syllable
     if ((word.charAt(0) === 'n') && (word.charAt(1) !== '') &&
-      (this.isNotVowel(word.charAt(1))) && (word.charAt(1) !== 'g')) {
+        (this.isNotVowel(word.charAt(1))) && (word.charAt(1) !== 'g')) {
       syllablesOfWord.push('n');
       word = word.slice(1);
     } else if ((word.charAt(0) === 'm') && (this.isNotVowel(word.charAt(1)))) {
@@ -62,28 +62,28 @@ export class SwahiliParser {
       // beginning to current vowel UNLESS the next letter is an m,
       // 0R an n that DOES NOT  have a g after it
       if ((word.charAt(vowelIndex + 1) === 'n') &&
-        (word.charAt(vowelIndex + 2) !== '') &&
-        (word.charAt(vowelIndex + 2) !== 'g') &&
-        (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+          (word.charAt(vowelIndex + 2) !== '') &&
+          (word.charAt(vowelIndex + 2) !== 'g') &&
+          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
       }
       // check for syllable ending in m
       else if (
-        (word.charAt(vowelIndex + 1) === 'm') &&
-        (word.charAt(vowelIndex + 2) !== '') &&
-        (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+          (word.charAt(vowelIndex + 1) === 'm') &&
+          (word.charAt(vowelIndex + 2) !== '') &&
+          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
         currentSyllable = word.slice(0, vowelIndex + 1);
         word = word.slice(vowelIndex + 1);
       }
       // check for the one closed syllable case, where an
       // arabic loan word causes an '(C)al' sound
       else if (
-        (word.charAt(vowelIndex) === 'a') &&
-        (word.charAt(vowelIndex + 1) !== '') &&
-        (word.charAt(vowelIndex + 1) === 'l') &&
-        (word.charAt(vowelIndex + 2) !== '') &&
-        (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+          (word.charAt(vowelIndex) === 'a') &&
+          (word.charAt(vowelIndex + 1) !== '') &&
+          (word.charAt(vowelIndex + 1) === 'l') &&
+          (word.charAt(vowelIndex + 2) !== '') &&
+          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
       }
@@ -111,6 +111,7 @@ export class SwahiliParser {
     sentence = sentence.toLowerCase();
 
     let syllablesOfSentence = '';
+    const indonesianifySwahiliWords = 'h'
     const shortDelimeter = ' ';
     const longDelimeter = '.';
     let syllablesOfWord = [];
@@ -121,6 +122,12 @@ export class SwahiliParser {
 
       syllablesOfWord.forEach(syllable => {
         syllablesOfSentence += syllable;
+
+        // this is the greasiest line of code I have ever written -
+        // by adding an h onto every swahili syllable,
+        // the Indonesian voice API does a pretty good
+        // job of pronouncing the words! xD
+        syllablesOfSentence += indonesianifySwahiliWords;
         syllablesOfSentence += shortDelimeter;
       });
 
