@@ -1,3 +1,0 @@
-[submodule "lib/speak"]
-	path = lib/speak
-	url = https://github.com/seanmiller9/speak.js.git
