@@ -7,7 +7,6 @@
 // Parses a Swahili phrase into syllables
 // By: Sean Miller
 // 2018-05-24
-
 class SwahiliParser {
   /**
    * Verifies that a char is not a vowel
@@ -116,7 +115,7 @@ class SwahiliParser {
     sentence = sentence.toLowerCase();
 
     let syllablesOfSentence = '';
-    const indonesianifySwahiliWords = 'h'
+    // const indonesianifySwahiliWords = 'h';
     const shortDelimeter = ' ';
     const longDelimeter = '.';
     let syllablesOfWord = [];
@@ -132,7 +131,7 @@ class SwahiliParser {
         // by adding an h onto every swahili syllable,
         // the Indonesian voice API does a pretty good
         // job of pronouncing the words! xD
-        syllablesOfSentence += indonesianifySwahiliWords;
+        // syllablesOfSentence += indonesianifySwahiliWords;
         syllablesOfSentence += shortDelimeter;
       });
 
@@ -158,7 +157,6 @@ chrome.runtime.onMessage.addListener(function(request) {
     msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay)
     msg.lang = 'id';
     msg.rate = '0.8';
-
     speechSynthesis.speak(msg);
   }
 });

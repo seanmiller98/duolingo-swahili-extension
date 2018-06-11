@@ -1,7 +1,7 @@
 {
     "name": "Duolingo Swahili+",
     "version": "0.1",
-    "description": "This extension provides users with audio recordings during Swahili exercises",
+    "description": "This extension provides users with audio during Swahili lessons on Duolingo",
     "short_name": "Kiswahili ni nzuri!",
     "permissions": [
         "activeTab",
