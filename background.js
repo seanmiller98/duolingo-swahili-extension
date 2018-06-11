@@ -64,10 +64,11 @@ class SwahiliParser {
 
       // vowel has been found, current syllable is substring from
       // beginning to current vowel UNLESS the next letter is an m,
-      // 0R an n that DOES NOT  have a g after it
+      // 0R an n that DOES NOT have a g or a y after it
       if ((word.charAt(vowelIndex + 1) === 'n') &&
           (word.charAt(vowelIndex + 2) !== '') &&
           (word.charAt(vowelIndex + 2) !== 'g') &&
+          (word.charAt(vowelIndex + 2) !== 'y') &&
           (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
@@ -104,6 +105,30 @@ class SwahiliParser {
   }
 
   /**
+   * Indonesian-ifies Swahili syllables so that
+   * they can be pronounced properly by the Chrome TTS
+   * @param {string} syllables A string of swahili syllables
+   * @return {string} A Swahili syllable chain that is altered so that the
+   * Indonesian TTS can be tricked into pronouncing it properly
+   */
+  static indonesianify(syllables) {
+    syllables = syllables.replace(/sh/gi, 'sy');
+    syllables = syllables.replace(/o/gi, 'oh');
+    syllables = syllables.replace(/be/gi, 'beh');
+    syllables = syllables.replace(/ ngw/gi, 'ng gu');
+    syllables = syllables.replace(/ nga/gi, 'ng ga');  
+    syllables = syllables.replace(/ nge/gi, 'ng ge'); 
+    syllables = syllables.replace(/ ngi/gi, 'ng gi'); 
+    syllables = syllables.replace(/ ngo/gi, 'ng goh'); 
+    syllables = syllables.replace(/ ngu/gi, 'ng gu'); 
+    syllables = syllables.replace(/mw/gi, 'mu'); 
+    syllables = syllables.replace(/hi/gi, 'hih');
+    syllables = syllables.replace(/m /gi, 'm');
+    syllables = syllables.replace(/n /gi, 'n');
+    return syllables;
+  }
+
+  /**
    * Parses a phrase of swahili words into a long string of
    * its syllables that can be output as speech via
    * Google Chrome TTS API (by using indonesian voice)
@@ -115,9 +140,8 @@ class SwahiliParser {
     sentence = sentence.toLowerCase();
 
     let syllablesOfSentence = '';
-    // const indonesianifySwahiliWords = 'h';
     const shortDelimeter = ' ';
-    const longDelimeter = '.';
+    const longDelimeter = ' ';
     let syllablesOfWord = [];
     const words = sentence.split(' ');
 
@@ -126,12 +150,6 @@ class SwahiliParser {
 
       syllablesOfWord.forEach(syllable => {
         syllablesOfSentence += syllable;
-
-        // this is the greasiest line of code I have ever written -
-        // by adding an h onto every swahili syllable,
-        // the Indonesian voice API does a pretty good
-        // job of pronouncing the words! xD
-        // syllablesOfSentence += indonesianifySwahiliWords;
         syllablesOfSentence += shortDelimeter;
       });
 
@@ -139,6 +157,7 @@ class SwahiliParser {
       syllablesOfSentence += longDelimeter;
     }
 
+    syllablesOfSentence = this.indonesianify(syllablesOfSentence);
     return syllablesOfSentence;
   }
 }
@@ -149,7 +168,6 @@ let oldSentence = '';
 
 // listen for a message sent from content, and then output the desired text
 chrome.runtime.onMessage.addListener(function(request) {
-
   if (oldSentence === '' || oldSentence !== request.toSay) {
     oldSentence = request.toSay;
 

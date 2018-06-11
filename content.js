@@ -49,7 +49,6 @@ const observer = new MutationObserver(function(mutations) {
       for (let removedNode of mutation.removedNodes) {
         if (removedNode.innerText !== undefined) {
           if (removedNode.innerText.search(/write this in english/gi) !== -1) {
-            console.log(removedNode.innerText);
             if (document.body.innerText.search(/write this in english/gi) !==
                 -1) {
               isStillSwahiliChallenge = true;
