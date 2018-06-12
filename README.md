@@ -21,7 +21,7 @@ By far the trickiest challenge is outputting the text as speech; as of now, Chro
 does not support TTS (text-to-speech) for Swahili, so my crazy work-around after
 lots of research on how to best approach this difficulty works as follows:
 1. Convert the sentence into a collection of its syllables via a Swahili
-word syllable processing algorithm
+word syllable processing algorithm.
 2. Slightly convert the syllables in order to be read properly... by the 
 Indonesian TTS service provided by Chrome.
 3. Output the syllables in quick enough succession by the Indonesian TTS that

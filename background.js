@@ -3,10 +3,6 @@
 // By: Sean Miller
 // 2018-06-09
 
-// Swahili language parser -- swahili-parser.js
-// Parses a Swahili phrase into syllables
-// By: Sean Miller
-// 2018-05-24
 class SwahiliParser {
   /**
    * Verifies that a char is not a vowel
@@ -112,16 +108,18 @@ class SwahiliParser {
    * Indonesian TTS can be tricked into pronouncing it properly
    */
   static indonesianify(syllables) {
-    syllables = syllables.replace(/sh/gi, 'sy');
+    syllables = syllables.replace(/sh/gi, 'sj');
     syllables = syllables.replace(/o/gi, 'oh');
     syllables = syllables.replace(/be/gi, 'beh');
     syllables = syllables.replace(/ ngw/gi, 'ng gu');
-    syllables = syllables.replace(/ nga/gi, 'ng ga');  
-    syllables = syllables.replace(/ nge/gi, 'ng ge'); 
-    syllables = syllables.replace(/ ngi/gi, 'ng gi'); 
-    syllables = syllables.replace(/ ngo/gi, 'ng goh'); 
-    syllables = syllables.replace(/ ngu/gi, 'ng gu'); 
-    syllables = syllables.replace(/mw/gi, 'mu'); 
+    syllables = syllables.replace(/ nga/gi, 'ng ga');
+    syllables = syllables.replace(/ nge/gi, 'ng ge');
+    syllables = syllables.replace(/ ngi/gi, 'ng gi');
+    syllables = syllables.replace(/ ngo/gi, 'ng goh');
+    syllables = syllables.replace(/ ngu/gi, 'ng gu');
+    syllables = syllables.replace(/swa/gi, 'sua');
+    syllables = syllables.replace(/we/, 'weh')
+    syllables = syllables.replace(/mw/gi, 'mu');
     syllables = syllables.replace(/hi/gi, 'hih');
     syllables = syllables.replace(/m /gi, 'm');
     syllables = syllables.replace(/n /gi, 'n');
@@ -130,8 +128,7 @@ class SwahiliParser {
 
   /**
    * Parses a phrase of swahili words into a long string of
-   * its syllables that can be output as speech via
-   * Google Chrome TTS API (by using indonesian voice)
+   * its syllables
    * @param {string} sentence A swahili phrase
    * @return {string} A string of the syllables of the phrase seperated by a delimeter
    * (i.e. "ni-na-pen-da__ki-swa-hi-li_")
@@ -140,8 +137,7 @@ class SwahiliParser {
     sentence = sentence.toLowerCase();
 
     let syllablesOfSentence = '';
-    const shortDelimeter = ' ';
-    const longDelimeter = ' ';
+    const delimeter = ' ';
     let syllablesOfWord = [];
     const words = sentence.split(' ');
 
@@ -150,20 +146,19 @@ class SwahiliParser {
 
       syllablesOfWord.forEach(syllable => {
         syllablesOfSentence += syllable;
-        syllablesOfSentence += shortDelimeter;
+        syllablesOfSentence += delimeter;
       });
 
       // push an empty syllable to signify a pause between words
-      syllablesOfSentence += longDelimeter;
+      syllablesOfSentence += delimeter;
     }
 
+    // turn the syllables into their Indonesian equivalent
     syllablesOfSentence = this.indonesianify(syllablesOfSentence);
     return syllablesOfSentence;
   }
 }
 
-
-// import { SwahiliParser } from './swahili-parser';
 let oldSentence = '';
 
 // listen for a message sent from content, and then output the desired text
@@ -174,7 +169,7 @@ chrome.runtime.onMessage.addListener(function(request) {
     const msg = new SpeechSynthesisUtterance();
     msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay)
     msg.lang = 'id';
-    msg.rate = '0.8';
+    msg.rate = '0.75';
     speechSynthesis.speak(msg);
   }
 });

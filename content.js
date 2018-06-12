@@ -1,18 +1,23 @@
 // Background script -- background.js
 // Listens for mutations in the DOM and triggers the sentence
-// parser if it senses a mutation
+// parser if it senses a mutation; it then sends the
+// collection of syllables to background.js to be output
+// as audio
 // By: Sean Miller
 // 2018-06-03
 
+// We want to listen to mutations of the document's children
+// and grandchildren, etc.
 const config = {
   childList: true,
   subtree: true
 };
 
 /**
- * Verifies that a char is not a vowel
- * @param {string} letter A swahili letter
- * @return {boolean} A boolean of whether the char is not a variable
+ * Cleans up the gross format of the inner text of the Duolingo
+ * test field
+ * @param {string} sentence An unformatted mess of a sentence
+ * @return {string} The proper string respresentation of the sentence
  */
 function cleanUpDuolingoSentence(sentence) {
   sentence = sentence.toLowerCase();
@@ -24,18 +29,20 @@ function cleanUpDuolingoSentence(sentence) {
   return sentence;
 }
 
+let oldSentence = '';
+
 // Create an observer instance linked to the callback function
 const observer = new MutationObserver(function(mutations) {
-
   // check to see if desired test is present
   // this is more complicated than it sounds... we must
   // check that it either just became a Swahili challenge,
   // or that it is remaining a Swahili challenge by
-  // searching through the added/removed nodes of the 
+  // searching through the added/removed nodes of the
   // mutations
   let isNewSwahiliChallenge = false;
   let isStillSwahiliChallenge = false;
   let isSwahiliChallenge = false;
+
   for (let mutation of mutations) {
     for (let addedNode of mutation.addedNodes) {
       if (addedNode.innerText !== undefined) {
@@ -63,9 +70,13 @@ const observer = new MutationObserver(function(mutations) {
     isSwahiliChallenge = true;
   }
 
+  // if (document.body.innerText.search(/Correct/gi) !== -1) {
+  //   chrome.runtime.sendMessage({toSay: ''}, function() {});
+  //   isSwahiliChallenge = false;
+  // }
+
 
   if (isSwahiliChallenge) {
-
     // This is where the test sentence is located in the DOM
     const targetNode =
         document.querySelector('div[data-test="challenge-translate-prompt"]');
@@ -87,40 +98,41 @@ const observer = new MutationObserver(function(mutations) {
       sentenceString += ' ';
     }
 
-    // for testing purposes:
-    // console.log(`Sentence: ${sentenceString}`);
-
     // finally, send the array of words to the background script to be
     // output as audio
-    // chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
+    if (oldSentence !== sentenceString) {
+      oldSentence = sentenceString;
+      chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
+    }
+
 
     // the proper CSS selector to extract the individial words of the sentence
     const words = targetNode.querySelectorAll('span>span');
 
-    chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
-
     // set up mouse-enter listeners for each of the child words
     // of the sentence prop
-    // for (let i = 0; i < words.length; i++) {
-    //   if (words[i].innerText !== ' ' &&
-    //       words[i].assignedEventListener === undefined) {
-    //     words[i].assignedEventListener = true;
-    //     words[i].addEventListener('mouseover', function() {
-    //       console.log(words[i].innerText);
-    // chrome.runtime.sendMessage(
-    //     {toSay: cleanUpDuolingoSentence(words[i].innerText)[0]},
-    //     function() {});
-    //     })
-    //   }
-    // }
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].innerText !== ' ' &&
+          words[i].assignedEventListener === undefined) {
+        words[i].assignedEventListener = true;
+        words[i].addEventListener('mouseover', function() {
+          console.log(words[i].innerText);
+          chrome.runtime.sendMessage(
+              {toSay: cleanUpDuolingoSentence(words[i].innerText)[0]},
+              function() {});
+        })
+      }
+    }
 
-    // // set up mouse-leave listeners for each of the child words
-    // // of the sentence prop
-    // for (let i = 0; i < words.length; i++) {
-    //   words[i].addEventListener('mouseleave', function() {
-    //     chrome.runtime.sendMessage({toSay: ''}, function() {});
-    //   })
-    // }
+    // set up mouse-leave listeners for each of the child words
+    // of the sentence prop... this is sort of a hack to get
+    // the background script to keep track of the fact that
+    // the last "spoken" word was actually nothing
+    for (let i = 0; i < words.length; i++) {
+      words[i].addEventListener('mouseleave', function() {
+        chrome.runtime.sendMessage({toSay: ''}, function() {});
+      })
+    }
   }
 });
 
