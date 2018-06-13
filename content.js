@@ -39,99 +39,107 @@ const observer = new MutationObserver(function(mutations) {
   // or that it is remaining a Swahili challenge by
   // searching through the added/removed nodes of the
   // mutations
-  let isNewSwahiliChallenge = false;
-  let isStillSwahiliChallenge = false;
-  let isSwahiliChallenge = false;
 
-  for (let mutation of mutations) {
-    for (let addedNode of mutation.addedNodes) {
-      if (addedNode.innerText !== undefined) {
-        if (addedNode.innerText.search(/write this in english/gi) !== -1) {
-          isNewSwahiliChallenge = true;
+  // always make sure that the mutations are only being observed on pages where
+  // the user is learning Swahili
+  if (JSON.parse(localStorage['duo.state']).user.learningLanguage === 'sw') {
+    let isNewSwahiliChallenge = false;
+    let isStillSwahiliChallenge = false;
+    let isSwahiliChallenge = false;
+
+    for (let mutation of mutations) {
+      for (let addedNode of mutation.addedNodes) {
+        if (addedNode.innerText !== undefined) {
+          if (addedNode.innerText.search(/write this in english/gi) !== -1) {
+            isNewSwahiliChallenge = true;
+          }
         }
       }
-    }
 
-    if (!isNewSwahiliChallenge) {
-      for (let removedNode of mutation.removedNodes) {
-        if (removedNode.innerText !== undefined) {
-          if (removedNode.innerText.search(/write this in english/gi) !== -1) {
-            if (document.body.innerText.search(/write this in english/gi) !==
+      if (!isNewSwahiliChallenge) {
+        for (let removedNode of mutation.removedNodes) {
+          if (removedNode.innerText !== undefined) {
+            if (removedNode.innerText.search(/write this in english/gi) !==
                 -1) {
-              isStillSwahiliChallenge = true;
+              if (document.body.innerText.search(/write this in english/gi) !==
+                  -1) {
+                isStillSwahiliChallenge = true;
+              }
             }
           }
         }
       }
     }
-  }
 
-  if (isStillSwahiliChallenge || isNewSwahiliChallenge) {
-    isSwahiliChallenge = true;
-  }
-
-  // if (document.body.innerText.search(/Correct/gi) !== -1) {
-  //   chrome.runtime.sendMessage({toSay: ''}, function() {});
-  //   isSwahiliChallenge = false;
-  // }
-
-
-  if (isSwahiliChallenge) {
-    // This is where the test sentence is located in the DOM
-    const targetNode =
-        document.querySelector('div[data-test="challenge-translate-prompt"]');
-
-    // Parse the text of the element into its individual words, filtering
-    // out any whitespace and special characters
-    sentence = targetNode.innerText;
-    sentence = cleanUpDuolingoSentence(sentence);
-
-    // We must trim the words once again to remove leading whitespace
-    for (let i = 0; i < sentence.length; i++) {
-      sentence[i] = sentence[i].trim();
+    if (isStillSwahiliChallenge || isNewSwahiliChallenge) {
+      isSwahiliChallenge = true;
     }
 
-    // now we must convert array of words back to a string
-    let sentenceString = '';
-    for (let word of sentence) {
-      sentenceString += word;
-      sentenceString += ' ';
-    }
-
-    // finally, send the array of words to the background script to be
-    // output as audio
-    if (oldSentence !== sentenceString) {
-      oldSentence = sentenceString;
-      chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
-    }
+    // if (document.body.innerText.search(/Correct/gi) !== -1) {
+    //   chrome.runtime.sendMessage({toSay: ''}, function() {});
+    //   isSwahiliChallenge = false;
+    // }
 
 
-    // the proper CSS selector to extract the individial words of the sentence
-    const words = targetNode.querySelectorAll('span>span');
+    if (isSwahiliChallenge) {
+      // This is where the test sentence is located in the DOM
+      const targetNode =
+          document.querySelector('div[data-test="challenge-translate-prompt"]');
 
-    // set up mouse-enter listeners for each of the child words
-    // of the sentence prop
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].innerText !== ' ' &&
-          words[i].assignedEventListener === undefined) {
-        words[i].assignedEventListener = true;
-        words[i].addEventListener('mouseover', function() {
-          console.log(words[i].innerText);
-          chrome.runtime.sendMessage(
-              {toSay: cleanUpDuolingoSentence(words[i].innerText)[0]},
-              function() {});
-        })
+      // Parse the text of the element into its individual words, filtering
+      // out any whitespace and special characters
+      sentence = targetNode.innerText;
+      sentence = cleanUpDuolingoSentence(sentence);
+
+      // We must trim the words once again to remove leading whitespace
+      for (let i = 0; i < sentence.length; i++) {
+        sentence[i] = sentence[i].trim();
       }
-    }
 
-    // set up mouse-leave listeners for each of the child words
-    // of the sentence prop... this is sort of a hack to get
-    // the background script to keep track of the fact that
-    // the last "spoken" word was actually nothing
-    for (let i = 0; i < words.length; i++) {
-      words[i].addEventListener('mouseleave', function() {
-        chrome.runtime.sendMessage({toSay: ''}, function() {});
-      })
+      // now we must convert array of words back to a string
+      let sentenceString = '';
+      for (let word of sentence) {
+        sentenceString += word;
+        sentenceString += ' ';
+      }
+
+      // finally, send the array of words to the background script to be
+      // output as audio
+      if (oldSentence !== sentenceString) {
+        oldSentence = sentenceString;
+        chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
+      }
+
+
+      // the proper CSS selector to extract the individial words of the sentence
+      const words = targetNode.querySelectorAll('span>span');
+
+      // set up mouse-enter listeners for each of the child words
+      // of the sentence prop
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].innerText !== ' ' &&
+            words[i].assignedMouseOver === undefined) {
+          words[i].assignedMouseOver = true;
+          words[i].addEventListener('mouseover', function() {
+            chrome.runtime.sendMessage(
+                {toSay: cleanUpDuolingoSentence(words[i].innerText)[0]},
+                function() {});
+          })
+        }
+      }
+
+      // set up mouse-leave listeners for each of the child words
+      // of the sentence prop... this is sort of a hack to get
+      // the background script to keep track of the fact that
+      // the last "spoken" word was actually nothing
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].assignedMouseLeave === undefined) {
+          words[i].assignedMouseLeave = true;
+          words[i].addEventListener('mouseleave', function() {
+            chrome.runtime.sendMessage({toSay: ''}, function() {});
+          })
+        }
+      }
     }
   }
 });
