@@ -74,8 +74,8 @@ class SwahiliParser {
           (word.charAt(vowelIndex + 1) === 'm') &&
           (word.charAt(vowelIndex + 2) !== '') &&
           (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
-        currentSyllable = word.slice(0, vowelIndex + 1);
-        word = word.slice(vowelIndex + 1);
+        currentSyllable = word.slice(0, vowelIndex + 2);
+        word = word.slice(vowelIndex + 2);
       }
       // check for the one closed syllable case, where an
       // arabic loan word causes an '(C)al' sound
@@ -109,7 +109,8 @@ class SwahiliParser {
    */
   static indonesianify(syllables) {
     syllables = syllables.replace(/sh/gi, 'sj');
-    syllables = syllables.replace(/o/gi, 'oh');
+    syllables = syllables.replace(/o /gi, 'oh ');
+    syllables = syllables.replace(/e /gi, 'eh ');
     syllables = syllables.replace(/be/gi, 'beh');
     syllables = syllables.replace(/ ngw/gi, 'ng gu');
     syllables = syllables.replace(/ nga/gi, 'ng ga');
@@ -119,12 +120,20 @@ class SwahiliParser {
     syllables = syllables.replace(/ ngu/gi, 'ng gu');
     syllables = syllables.replace(/swa/gi, 'sua');
     syllables = syllables.replace(/mche /gi, 'mceh')
-    syllables = syllables.replace(/a i/gi, 'ai');
-    syllables = syllables.replace(/we/gi, 'weh')
-    syllables = syllables.replace(/mw/gi, 'mu');
+    syllables = syllables.replace(/a i /gi, 'ai ');
+    syllables = syllables.replace(/i a /gi, 'ia ');
+    syllables = syllables.replace(/we /gi, 'weh')
     syllables = syllables.replace(/hi/gi, 'hih');
     syllables = syllables.replace(/m /gi, 'm');
     syllables = syllables.replace(/n /gi, 'n');
+    syllables = syllables.replace(/mcha/gi, 'm cah');
+    syllables = syllables.replace(/mcho/gi, 'm choh');
+    syllables = syllables.replace(/mw/gi, 'mu');
+    syllables = syllables.replace(/ sji/gi, 'syi');
+    syllables = syllables.replace(/ sje/gi, 'sye');
+    syllables = syllables.replace(/ oh /gi, ' o ');
+    syllables = syllables.replace(/a m /gi, 'am ');
+    syllables = syllables.replace(/ gh/gi, ' hr');
     return syllables;
   }
 
@@ -142,6 +151,7 @@ class SwahiliParser {
     const delimeter = ' ';
     let syllablesOfWord = [];
     const words = sentence.split(' ');
+    syllablesOfSentence += delimeter
 
     for (let word of words) {
       syllablesOfWord = this.parseWordIntoSyllables(word);
