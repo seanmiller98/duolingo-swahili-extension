@@ -4,9 +4,7 @@
     "description": "This extension provides users with audio during Swahili lessons on Duolingo",
     "short_name": "Kiswahili ni nzuri!",
     "permissions": [
-        "activeTab",
-        "storage",
-        "tts"
+        "activeTab"
     ],
     "content_scripts": [
         {
@@ -19,7 +17,7 @@
         }
     ],
     "background": {
-        "scripts": ["background.js"],
+        "scripts": ["background.js"], 
         "persistent": false
     },
     "browser_action": {
