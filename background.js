@@ -122,7 +122,8 @@ class SwahiliParser {
     syllables = syllables.replace(/mche /gi, 'mceh')
     syllables = syllables.replace(/a i /gi, 'ai ');
     syllables = syllables.replace(/i a /gi, 'ia ');
-    syllables = syllables.replace(/we /gi, 'weh')
+    syllables = syllables.replace(/we /gi, 'weh ')
+    syllables = syllables.replace(/ke /gi, 'keh ')
     syllables = syllables.replace(/hi/gi, 'hih');
     syllables = syllables.replace(/m /gi, 'm');
     syllables = syllables.replace(/n /gi, 'n');
@@ -134,6 +135,7 @@ class SwahiliParser {
     syllables = syllables.replace(/ oh /gi, ' o ');
     syllables = syllables.replace(/a m /gi, 'am ');
     syllables = syllables.replace(/ gh/gi, ' hr');
+    syllables = syllables.replace(/a n /gi, 'an ');
     return syllables;
   }
 
@@ -181,7 +183,7 @@ chrome.runtime.onMessage.addListener(function(request) {
     const msg = new SpeechSynthesisUtterance();
     msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay)
     msg.lang = 'id';
-    msg.rate = '0.85';
+    msg.rate = '0.80';
     speechSynthesis.speak(msg);
   }
 });

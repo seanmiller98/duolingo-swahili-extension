@@ -9,7 +9,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://www.duolingo.com/skill/sw/*"
+                "*://www.duolingo.com/*"
             ],
             "js": [
                 "content.js"

@@ -21,15 +21,43 @@ const config = {
  */
 function cleanUpDuolingoSentence(sentence) {
   sentence = sentence.toLowerCase();
-  sentence = sentence.replace(/[`~!@#$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');
+  sentence = sentence.replace(/[`~!@#$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, "");
   sentence = sentence.split(/[\r\n]+/);
   sentence = sentence.filter(function(word) {
-    return (word !== '');
+    return word !== "";
   });
   return sentence;
 }
 
-let oldSentence = '';
+let oldSentence = "";
+
+// window.addEventListener("load", function(event) {
+//   if (JSON.parse(localStorage["duo.state"]).user.learningLanguage === "sw") {
+//     const targetNode = document.querySelector(
+//       'div[data-test="challenge-translate-prompt"]'
+//     );
+
+//     if (targetNode != null) {
+//       // Parse the text of the element into its individual words, filtering
+//       // out any whitespace and special characters
+//       sentence = targetNode.innerText;
+//       sentence = cleanUpDuolingoSentence(sentence);
+
+//       // We must trim the words once again to remove leading whitespace
+//       for (let i = 0; i < sentence.length; i++) {
+//         sentence[i] = sentence[i].trim();
+//       }
+
+//       // now we must convert array of words back to a string
+//       let sentenceString = "";
+//       for (let word of sentence) {
+//         sentenceString += word;
+//         sentenceString += " ";
+//       }
+//       chrome.runtime.sendMessage({ toSay: sentenceString }, function() {});
+//     }
+//   }
+// });
 
 // Create an observer instance linked to the callback function
 const observer = new MutationObserver(function(mutations) {
@@ -42,7 +70,7 @@ const observer = new MutationObserver(function(mutations) {
 
   // always make sure that the mutations are only being observed on pages where
   // the user is learning Swahili
-  if (JSON.parse(localStorage['duo.state']).user.learningLanguage === 'sw') {
+  if (JSON.parse(localStorage["duo.state"]).user.learningLanguage === "sw") {
     let isNewSwahiliChallenge = false;
     let isStillSwahiliChallenge = false;
     let isSwahiliChallenge = false;
@@ -59,10 +87,12 @@ const observer = new MutationObserver(function(mutations) {
       if (!isNewSwahiliChallenge) {
         for (let removedNode of mutation.removedNodes) {
           if (removedNode.innerText !== undefined) {
-            if (removedNode.innerText.search(/write this in english/gi) !==
-                -1) {
-              if (document.body.innerText.search(/write this in english/gi) !==
-                  -1) {
+            if (
+              removedNode.innerText.search(/write this in english/gi) !== -1
+            ) {
+              if (
+                document.body.innerText.search(/write this in english/gi) !== -1
+              ) {
                 isStillSwahiliChallenge = true;
               }
             }
@@ -80,11 +110,11 @@ const observer = new MutationObserver(function(mutations) {
     //   isSwahiliChallenge = false;
     // }
 
-
     if (isSwahiliChallenge) {
       // This is where the test sentence is located in the DOM
-      const targetNode =
-          document.querySelector('div[data-test="challenge-translate-prompt"]');
+      const targetNode = document.querySelector(
+        'div[data-test="challenge-translate-prompt"]'
+      );
 
       // Parse the text of the element into its individual words, filtering
       // out any whitespace and special characters
@@ -97,34 +127,41 @@ const observer = new MutationObserver(function(mutations) {
       }
 
       // now we must convert array of words back to a string
-      let sentenceString = '';
+      let sentenceString = "";
       for (let word of sentence) {
         sentenceString += word;
-        sentenceString += ' ';
+        sentenceString += " ";
       }
 
       // finally, send the array of words to the background script to be
       // output as audio
+      //  NOTE: make sure that that weird bug where the text is output after a
+      // user gets a question wrong is not present by searching the text for
+      // an instance of "Correct solution"
       if (oldSentence !== sentenceString) {
-        oldSentence = sentenceString;
-        chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
+        if (document.body.innerText.search(/Correct solution/gi) === -1) {
+          oldSentence = sentenceString;
+          chrome.runtime.sendMessage({ toSay: sentenceString }, function() {});
+        }
       }
 
-
       // the proper CSS selector to extract the individial words of the sentence
-      const words = targetNode.querySelectorAll('span>span');
+      const words = targetNode.querySelectorAll("span>span");
 
       // set up mouse-enter listeners for each of the child words
       // of the sentence prop
       for (let i = 0; i < words.length; i++) {
-        if (words[i].innerText !== ' ' &&
-            words[i].assignedMouseOver === undefined) {
+        if (
+          words[i].innerText !== " " &&
+          words[i].assignedMouseOver === undefined
+        ) {
           words[i].assignedMouseOver = true;
-          words[i].addEventListener('mouseover', function() {
+          words[i].addEventListener("mouseover", function() {
             chrome.runtime.sendMessage(
-                {toSay: cleanUpDuolingoSentence(words[i].innerText)[0]},
-                function() {});
-          })
+              { toSay: cleanUpDuolingoSentence(words[i].innerText)[0] },
+              function() {}
+            );
+          });
         }
       }
 
@@ -135,9 +172,9 @@ const observer = new MutationObserver(function(mutations) {
       for (let i = 0; i < words.length; i++) {
         if (words[i].assignedMouseLeave === undefined) {
           words[i].assignedMouseLeave = true;
-          words[i].addEventListener('mouseleave', function() {
-            chrome.runtime.sendMessage({toSay: ''}, function() {});
-          })
+          words[i].addEventListener("mouseleave", function() {
+            chrome.runtime.sendMessage({ toSay: "" }, function() {});
+          });
         }
       }
     }
