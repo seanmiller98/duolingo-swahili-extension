@@ -130,12 +130,13 @@ class SwahiliParser {
     syllables = syllables.replace(/mcha/gi, 'm cah');
     syllables = syllables.replace(/mcho/gi, 'm choh');
     syllables = syllables.replace(/mw/gi, 'mu');
-    syllables = syllables.replace(/ sji/gi, 'syi');
-    syllables = syllables.replace(/ sje/gi, 'sye');
+    syllables = syllables.replace(/ sji/gi, 'h syi');
+    syllables = syllables.replace(/ sje/gi, 'h sye');
     syllables = syllables.replace(/ oh /gi, ' o ');
     syllables = syllables.replace(/a m /gi, 'am ');
     syllables = syllables.replace(/ gh/gi, ' hr');
     syllables = syllables.replace(/a n /gi, 'an ');
+    syllables = syllables.replace(/ chw/gi, ' cw');
     return syllables;
   }
 
@@ -173,7 +174,7 @@ class SwahiliParser {
   }
 }
 
-let oldSentence = '';
+let oldSentence = 'the first sentence of all time';
 
 // listen for a message sent from content, and then output the desired text
 chrome.runtime.onMessage.addListener(function(request) {
