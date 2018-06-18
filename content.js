@@ -29,10 +29,14 @@ function cleanUpDuolingoSentence(sentence) {
   return sentence;
 }
 
+// function used to solve the bug where too many mutations get triggered when a 
+// test screen changes
+const timeout = waitInMilSecs => new Promise((resolve) => setTimeout(resolve, waitInMilSecs));
+
 let oldSentence = '';
 
 // Create an observer instance linked to the callback function
-const observer = new MutationObserver(function(mutations) {
+const observer = new MutationObserver( async function(mutations) {
   // check to see if desired test is present
   // this is more complicated than it sounds... we must
   // check that it either just became a Swahili challenge,
@@ -69,26 +73,23 @@ const observer = new MutationObserver(function(mutations) {
             }
           }
         }
-      } else {
-        for (let removedNode of mutation.removedNodes) {
-          if (removedNode.innerText !== undefined) {
-            if (removedNode.innerText.search(/write this in swahili/gi) !==
-                -1) {
-              if (document.body.innerText.search(/write this in english/gi) !==
-                  -1) {
-                console.log("Hey sean, this is the fucking stupid ass mutation that is ruining your life");
-              }
-            }
-          }
-        }
-      }
+      } 
     }
 
+    // in either of the 2 possible 2 cases, we want the sentence audio to play 
+    // and to set up mouseover listeners for the words. Proceed!
     if (isStillSwahiliChallenge || isNewSwahiliChallenge) {
       isSwahiliChallenge = true;
     }
 
     if (isSwahiliChallenge) {
+      
+      // short wait to filter out any "noise" mutations that occur before the
+      // test page fully loads
+      if (document.body.innerText.search(/write this in english/gi)) {
+        await timeout(400);
+      }
+
       // This is where the test sentence is located in the DOM
       const targetNode =
           document.querySelector('div[data-test="challenge-translate-prompt"]');
@@ -112,19 +113,13 @@ const observer = new MutationObserver(function(mutations) {
 
       // finally, send the array of words to the background script to be
       // output as audio
-      //  NOTE: make sure that that weird bug where the text is output after a
-      // user gets a question wrong is not present by searching the text for
-      // an instance of "Correct solution"
       if (oldSentence !== sentenceString) {
-        if ((document.body.innerText.search(/Correct solution/gi) === -1) &&
-            (document.body.innerText.search(/you are correct/gi) === -1))  // &&
-        // (document.body.innerText.search(/write this in english/gi) !== -1) &&
-        // (document.body.innerText.search(/write this in swahili/gi) === -1))
-        {
+        // if ((document.body.innerText.search(/Correct solution/gi) === -1) &&
+        //     (document.body.innerText.search(/you are correct/gi) === -1))
+        // {
           oldSentence = sentenceString;
-          console.log(sentenceString);
           chrome.runtime.sendMessage({toSay: sentenceString}, function() {});
-        }
+        // }
 
 
         // the proper CSS selector to extract the individial words of the
