@@ -1,4 +1,4 @@
-// Background script -- background.js
+// Content script -- content.js
 // Listens for mutations in the DOM and triggers the sentence
 // parser if it senses a mutation; it then sends the
 // collection of syllables to background.js to be output
