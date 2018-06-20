@@ -129,14 +129,10 @@ class SwahiliParser {
     syllables = syllables.replace(/o /gi, 'oh ');
     syllables = syllables.replace(/e /gi, 'eh ');
 
-    // vowel diphthongs
-    syllables = syllables.replace(/a i /gi, 'ai ');
-    syllables = syllables.replace(/i a /gi, 'ia ');
-
     // various consonant sounds
     syllables = syllables.replace(/we /gi, 'weh ')
     syllables = syllables.replace(/ke /gi, 'keh ')
-    syllables = syllables.replace(/hi/gi, 'hih');
+    syllables = syllables.replace(/ hi/gi, 'hih');
     syllables = syllables.replace(/m /gi, 'm');
     syllables = syllables.replace(/n /gi, 'n');
     syllables = syllables.replace(/ chw/gi, ' cw');
@@ -149,8 +145,17 @@ class SwahiliParser {
     syllables = syllables.replace(/mw/gi, 'mu');
 
     // 'sh' sound fixing
-    syllables = syllables.replace(/ sji/gi, 'h syi');
-    syllables = syllables.replace(/ sje/gi, 'h sye');
+    syllables = syllables.replace(/a sji/gi, 'ah syi');
+    syllables = syllables.replace(/e sji/gi, 'eh syi');
+    syllables = syllables.replace(/i sji/gi, 'ih syi');
+    syllables = syllables.replace(/o sji/gi, 'oh syi');
+    syllables = syllables.replace(/u sji/gi, 'uh syi');
+
+    syllables = syllables.replace(/a sje/gi, 'ah sye');
+    syllables = syllables.replace(/e sje/gi, 'eh sye');
+    syllables = syllables.replace(/i sje/gi, 'ih sye');
+    syllables = syllables.replace(/o sje/gi, 'oh sye');
+    syllables = syllables.replace(/u sje/gi, 'uh sye');
 
     // fixing previous alterations of o sound
     syllables = syllables.replace(/ oh /gi, ' o ');
@@ -159,9 +164,10 @@ class SwahiliParser {
     syllables = syllables.replace(/a m /gi, 'am ');
     syllables = syllables.replace(/a n /gi, 'an ');
 
-    // Swahili sound of arabic style gh which has no 
-    // equivalent in Indonesian
+    // Swahili sounds which have no real equivalent 
+    // in Indonesian
     syllables = syllables.replace(/ gh/gi, ' hr');
+    syllables = syllables.replace(/ dh/gi, ' th');
     return syllables;
   }
 
