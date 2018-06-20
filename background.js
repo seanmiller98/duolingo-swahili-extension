@@ -3,7 +3,6 @@
 // By: Sean Miller
 // 2018-06-09
 
-// const SwahiliParser = require("./swahili-parser");
 
 /**************************************************************** */
 
@@ -111,35 +110,58 @@ class SwahiliParser {
    * Indonesian TTS can be tricked into pronouncing it properly
    */
   static indonesianify(syllables) {
+
+    // consonant clusters
     syllables = syllables.replace(/sh/gi, 'sj');
-    syllables = syllables.replace(/o /gi, 'oh ');
-    syllables = syllables.replace(/e /gi, 'eh ');
     syllables = syllables.replace(/be/gi, 'beh');
+    syllables = syllables.replace(/swa/gi, 'sua');
+    syllables = syllables.replace(/mche /gi, 'mceh')
+
+    // 'ng' sound
     syllables = syllables.replace(/ ngw/gi, 'ng gu');
     syllables = syllables.replace(/ nga/gi, 'ng ga');
     syllables = syllables.replace(/ nge/gi, 'ng ge');
     syllables = syllables.replace(/ ngi/gi, 'ng gi');
     syllables = syllables.replace(/ ngo/gi, 'ng goh');
     syllables = syllables.replace(/ ngu/gi, 'ng gu');
-    syllables = syllables.replace(/swa/gi, 'sua');
-    syllables = syllables.replace(/mche /gi, 'mceh')
+
+    // vowels being pronounced improperly
+    syllables = syllables.replace(/o /gi, 'oh ');
+    syllables = syllables.replace(/e /gi, 'eh ');
+
+    // vowel diphthongs
     syllables = syllables.replace(/a i /gi, 'ai ');
     syllables = syllables.replace(/i a /gi, 'ia ');
+
+    // various consonant sounds
     syllables = syllables.replace(/we /gi, 'weh ')
     syllables = syllables.replace(/ke /gi, 'keh ')
     syllables = syllables.replace(/hi/gi, 'hih');
     syllables = syllables.replace(/m /gi, 'm');
     syllables = syllables.replace(/n /gi, 'n');
+    syllables = syllables.replace(/ chw/gi, ' cw');
+    syllables = syllables.replace(/ pw/gi, ' pu');
+    syllables = syllables.replace(/ ks/gi, ' cksi');
+
+    // rare sounds involving onset of 'm'
     syllables = syllables.replace(/mcha/gi, 'm cah');
     syllables = syllables.replace(/mcho/gi, 'm choh');
     syllables = syllables.replace(/mw/gi, 'mu');
+
+    // 'sh' sound fixing
     syllables = syllables.replace(/ sji/gi, 'h syi');
     syllables = syllables.replace(/ sje/gi, 'h sye');
+
+    // fixing previous alterations of o sound
     syllables = syllables.replace(/ oh /gi, ' o ');
+
+    // rare occurence of m, n at end of word
     syllables = syllables.replace(/a m /gi, 'am ');
-    syllables = syllables.replace(/ gh/gi, ' hr');
     syllables = syllables.replace(/a n /gi, 'an ');
-    syllables = syllables.replace(/ chw/gi, ' cw');
+
+    // Swahili sound of arabic style gh which has no 
+    // equivalent in Indonesian
+    syllables = syllables.replace(/ gh/gi, ' hr');
     return syllables;
   }
 
