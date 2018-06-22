@@ -46,6 +46,9 @@ I strongly encourage anyone to try to improve the extension via pull-requests, b
 This project is licensed under the MIT license - see LICENSE.md for more details.
 
 ### Acknowledgements ### 
-..* The Duolingo team and course creators for the Swahili course
-..* Those responsible for adding SpeechSynthesis and MutationObserver's to HTML5 - none of this would have been possible without either!
+* The Duolingo team and course creators for the Swahili course. Thank you for choosing to build
+a course for such an amazing language!
+* Those responsible for adding SpeechSynthesis and MutationObserver's to HTML5 - none of this would have been possible without either.
+* The Google Chrome Extensions team - Chrome API's have some of the best documentation I have seen, so huge shoutout to them for maintaining and documenting their API's so rigorously.
+
 
