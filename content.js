@@ -1,8 +1,7 @@
 // Content script -- content.js
-// Listens for mutations in the DOM and triggers the sentence
-// parser if it senses a mutation; it then sends the
-// collection of syllables to background.js to be output
-// as audio
+// Listens for mutations in the DOM; if a "new Swahili challenge"
+// mutation occurs, sends the sentence to be spoken to background.js
+// and sets up mouseover listeners for each of the new words
 // By: Sean Miller
 // 2018-06-03
 
