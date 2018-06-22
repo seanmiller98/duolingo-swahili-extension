@@ -111,12 +111,6 @@ class SwahiliParser {
    */
   static indonesianify(syllables) {
 
-    // consonant clusters
-    syllables = syllables.replace(/sh/gi, 'sj');
-    syllables = syllables.replace(/be/gi, 'beh');
-    syllables = syllables.replace(/swa/gi, 'sua');
-    syllables = syllables.replace(/mche /gi, 'mceh')
-
     // 'ng' sound
     syllables = syllables.replace(/ ngw/gi, 'ng gu');
     syllables = syllables.replace(/ nga/gi, 'ng ga');
@@ -138,6 +132,12 @@ class SwahiliParser {
     syllables = syllables.replace(/ chw/gi, ' cw');
     syllables = syllables.replace(/ pw/gi, ' pu');
     syllables = syllables.replace(/ ks/gi, ' cksi');
+
+    // consonant clusters
+    syllables = syllables.replace(/sh/gi, 'sj');
+    syllables = syllables.replace(/be/gi, 'beh');
+    syllables = syllables.replace(/swa/gi, 'sua');
+    syllables = syllables.replace(/mche /gi, 'mceh')
 
     // rare sounds involving onset of 'm'
     syllables = syllables.replace(/mcha/gi, 'm cah');
@@ -214,6 +214,12 @@ chrome.runtime.onMessage.addListener(function (request) {
   if (oldSentence === '' || oldSentence !== request.toSay) {
     oldSentence = request.toSay;
 
+    // if the user scrolls over a new word, cut all
+    // audio for the previous word(s)
+    if (oldSentence !== '') {
+      speechSynthesis.cancel();
+    }
+    
     const msg = new SpeechSynthesisUtterance();
     msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay)
     msg.lang = 'id';

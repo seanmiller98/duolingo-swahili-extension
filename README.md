@@ -6,7 +6,7 @@ Duolingo.
 The way this extension works at a high level is like this:
 1. Create a background script that waits for messages to be sent from a 
 content script, and inject a content script into the webpage when the URL
-is of the form ...duolingo.com/sw/skills/...
+is of the form ...duolingo.com...
 2. When the content script is injected into the webpage, create an HTML5
 DOM MutationObserver which will get triggered whenever a mutation occurs to
 the webpage's DOM.
@@ -39,8 +39,13 @@ to me that this would be the only real way of working around the problem until
 Chrome supports Swahili TTS, by which point Duolingo probably will have added audio 
 support anyway. 
 
-### How to contribute ###
-This project is licensed under the MIT license and I strongly encourage anyone to 
-try to improve the extension via pull-requests, but perhaps even more importantly, 
-I recommend to anyone to use this project as a template to create audio extensions
-for the several other courses offered on Duolingo without audio!
+### Contributing ###
+I strongly encourage anyone to try to improve the extension via pull-requests, but perhaps even more importantly, I recommend to anyone to use this project as a template to create audio extensions for the several other courses offered on Duolingo without audio!
+
+### License ### 
+This project is licensed under the MIT license - see LICENSE.md for more details.
+
+### Acknowledgements ### 
+..* The Duolingo team and course creators for the Swahili course
+..* Those responsible for adding SpeechSynthesis and MutationObserver's to HTML5 - none of this would have been possible without either!
+
