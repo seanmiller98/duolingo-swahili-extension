@@ -44,7 +44,7 @@ I strongly encourage anyone to try to improve the extension via pull-requests, b
 
 ### Testing on Chrome ###
 1. Clone the repository
-2. Navigate to `chome://extensions` within Chrome
+2. Navigate to `chrome://extensions` within Chrome
 3. Select "Pack Extension"
 4. Select the previously cloned directory as the "Extension root directory"
 5. Click "PACK EXTENSION"
