@@ -3,7 +3,6 @@
 // By: Sean Miller
 // 2018-06-09
 
-
 /**************************************************************** */
 
 class SwahiliParser {
@@ -13,7 +12,7 @@ class SwahiliParser {
    * @return {boolean} A boolean of whether the char is not a variable
    */
   static isNotVowel(letter) {
-    const vowels = ['a', 'e', 'i', 'o', 'u'];
+    const vowels = ["a", "e", "i", "o", "u"];
     return !vowels.includes(letter);
   }
 
@@ -24,7 +23,7 @@ class SwahiliParser {
    */
   static parseWordIntoSyllables(word) {
     const syllablesOfWord = [];
-    let currentSyllable = '';
+    let currentSyllable = "";
     let vowelIndex = 0;
 
     // make sure that the string is only in lower case
@@ -32,16 +31,20 @@ class SwahiliParser {
 
     // check for the special n or m at the beginning of the word, which can get
     // its own syllable
-    if ((word.charAt(0) === 'n') && (word.charAt(1) !== '') &&
-        (this.isNotVowel(word.charAt(1))) && (word.charAt(1) !== 'g')) {
-      syllablesOfWord.push('n');
+    if (
+      word.charAt(0) === "n" &&
+      word.charAt(1) !== "" &&
+      this.isNotVowel(word.charAt(1)) &&
+      word.charAt(1) !== "g"
+    ) {
+      syllablesOfWord.push("n");
       word = word.slice(1);
-    } else if ((word.charAt(0) === 'm') && (this.isNotVowel(word.charAt(1)))) {
-      syllablesOfWord.push('m');
+    } else if (word.charAt(0) === "m" && this.isNotVowel(word.charAt(1))) {
+      syllablesOfWord.push("m");
       word = word.slice(1);
     }
 
-    while (word !== '') {
+    while (word !== "") {
       // reset the vowel index to the beginning of the words
       vowelIndex = 0;
 
@@ -63,30 +66,34 @@ class SwahiliParser {
       // vowel has been found, current syllable is substring from
       // beginning to current vowel UNLESS the next letter is an m,
       // 0R an n that DOES NOT have a g or a y after it
-      if ((word.charAt(vowelIndex + 1) === 'n') &&
-          (word.charAt(vowelIndex + 2) !== '') &&
-          (word.charAt(vowelIndex + 2) !== 'g') &&
-          (word.charAt(vowelIndex + 2) !== 'y') &&
-          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+      if (
+        word.charAt(vowelIndex + 1) === "n" &&
+        word.charAt(vowelIndex + 2) !== "" &&
+        word.charAt(vowelIndex + 2) !== "g" &&
+        word.charAt(vowelIndex + 2) !== "y" &&
+        this.isNotVowel(word.charAt(vowelIndex + 2))
+      ) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
       }
       // check for syllable ending in m
       else if (
-          (word.charAt(vowelIndex + 1) === 'm') &&
-          (word.charAt(vowelIndex + 2) !== '') &&
-          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+        word.charAt(vowelIndex + 1) === "m" &&
+        word.charAt(vowelIndex + 2) !== "" &&
+        this.isNotVowel(word.charAt(vowelIndex + 2))
+      ) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
       }
       // check for the one closed syllable case, where an
       // arabic loan word causes an '(C)al' sound
       else if (
-          (word.charAt(vowelIndex) === 'a') &&
-          (word.charAt(vowelIndex + 1) !== '') &&
-          (word.charAt(vowelIndex + 1) === 'l') &&
-          (word.charAt(vowelIndex + 2) !== '') &&
-          (this.isNotVowel(word.charAt(vowelIndex + 2)))) {
+        word.charAt(vowelIndex) === "a" &&
+        word.charAt(vowelIndex + 1) !== "" &&
+        word.charAt(vowelIndex + 1) === "l" &&
+        word.charAt(vowelIndex + 2) !== "" &&
+        this.isNotVowel(word.charAt(vowelIndex + 2))
+      ) {
         currentSyllable = word.slice(0, vowelIndex + 2);
         word = word.slice(vowelIndex + 2);
       }
@@ -110,64 +117,66 @@ class SwahiliParser {
    * Indonesian TTS can be tricked into pronouncing it properly
    */
   static indonesianify(syllables) {
-
     // 'ng' sound
-    syllables = syllables.replace(/ ngw/gi, 'ng gu');
-    syllables = syllables.replace(/ nga/gi, 'ng ga');
-    syllables = syllables.replace(/ nge/gi, 'ng ge');
-    syllables = syllables.replace(/ ngi/gi, 'ng gi');
-    syllables = syllables.replace(/ ngo/gi, 'ng goh');
-    syllables = syllables.replace(/ ngu/gi, 'ng gu');
+    syllables = syllables.replace(/ ngw/gi, "ng gu");
+    syllables = syllables.replace(/ nga/gi, "ng ga");
+    syllables = syllables.replace(/ nge/gi, "ng ge");
+    syllables = syllables.replace(/ ngi/gi, "ng gi");
+    syllables = syllables.replace(/ ngo/gi, "ng goh");
+    syllables = syllables.replace(/ ngu/gi, "ng gu");
 
     // vowels being pronounced improperly
-    syllables = syllables.replace(/o /gi, 'oh ');
-    syllables = syllables.replace(/e /gi, 'eh ');
+    syllables = syllables.replace(/o /gi, "oh ");
+    syllables = syllables.replace(/e /gi, "eh ");
 
     // various consonant sounds
-    syllables = syllables.replace(/we /gi, 'weh ')
-    syllables = syllables.replace(/ke /gi, 'keh ')
-    syllables = syllables.replace(/ hi/gi, 'hih');
-    syllables = syllables.replace(/m /gi, 'm');
-    syllables = syllables.replace(/n /gi, 'n');
-    syllables = syllables.replace(/ chw/gi, ' cw');
-    syllables = syllables.replace(/ pw/gi, ' pu');
-    syllables = syllables.replace(/ ks/gi, ' cksi');
+    syllables = syllables.replace(/we /gi, "weh ");
+    syllables = syllables.replace(/ke /gi, "keh ");
+    syllables = syllables.replace(/ hi/gi, "hih");
+    syllables = syllables.replace(/m /gi, "m");
+    syllables = syllables.replace(/n /gi, "n");
+    syllables = syllables.replace(/ chw/gi, " cw");
+    syllables = syllables.replace(/ pw/gi, " pu");
+    syllables = syllables.replace(/ ks/gi, " cksi");
 
     // consonant clusters
-    syllables = syllables.replace(/sh/gi, 'sj');
-    syllables = syllables.replace(/be/gi, 'beh');
-    syllables = syllables.replace(/swa/gi, 'sua');
-    syllables = syllables.replace(/mche /gi, 'mceh')
+    syllables = syllables.replace(/sh/gi, "sj");
+    syllables = syllables.replace(/be/gi, "beh");
+    syllables = syllables.replace(/swa/gi, "sua");
+    syllables = syllables.replace(/mche /gi, "mceh");
 
     // rare sounds involving onset of 'm'
-    syllables = syllables.replace(/mcha/gi, 'm cah');
-    syllables = syllables.replace(/mcho/gi, 'm choh');
-    syllables = syllables.replace(/mw/gi, 'mu');
+    syllables = syllables.replace(/mcha/gi, "m cah");
+    syllables = syllables.replace(/mcho/gi, "m choh");
+    syllables = syllables.replace(/mw/gi, "mu");
 
     // 'sh' sound fixing
-    syllables = syllables.replace(/a sji/gi, 'ah syi');
-    syllables = syllables.replace(/e sji/gi, 'eh syi');
-    syllables = syllables.replace(/i sji/gi, 'ih syi');
-    syllables = syllables.replace(/o sji/gi, 'oh syi');
-    syllables = syllables.replace(/u sji/gi, 'uh syi');
+    syllables = syllables.replace(/a sji/gi, "ah syi");
+    syllables = syllables.replace(/e sji/gi, "eh syi");
+    syllables = syllables.replace(/i sji/gi, "ih syi");
+    syllables = syllables.replace(/o sji/gi, "oh syi");
+    syllables = syllables.replace(/u sji/gi, "uh syi");
+    
+    syllables = syllables.replace(/ sja/gi, " sya");
+    syllables = syllables.replace(/ sjo/gi, " syo");
 
-    syllables = syllables.replace(/a sje/gi, 'ah sye');
-    syllables = syllables.replace(/e sje/gi, 'eh sye');
-    syllables = syllables.replace(/i sje/gi, 'ih sye');
-    syllables = syllables.replace(/o sje/gi, 'oh sye');
-    syllables = syllables.replace(/u sje/gi, 'uh sye');
+    syllables = syllables.replace(/a sje/gi, "ah sye");
+    syllables = syllables.replace(/e sje/gi, "eh sye");
+    syllables = syllables.replace(/i sje/gi, "ih sye");
+    syllables = syllables.replace(/o sje/gi, "oh sye");
+    syllables = syllables.replace(/u sje/gi, "uh sye");
 
     // fixing previous alterations of o sound
-    syllables = syllables.replace(/ oh /gi, ' o ');
+    syllables = syllables.replace(/ oh /gi, " o ");
 
     // rare occurence of m, n at end of word
-    syllables = syllables.replace(/a m /gi, 'am ');
-    syllables = syllables.replace(/a n /gi, 'an ');
+    syllables = syllables.replace(/a m /gi, "am ");
+    syllables = syllables.replace(/a n /gi, "an ");
 
-    // Swahili sounds which have no real equivalent 
+    // Swahili sounds which have no real equivalent
     // in Indonesian
-    syllables = syllables.replace(/ gh/gi, ' hr');
-    syllables = syllables.replace(/ dh/gi, ' th');
+    syllables = syllables.replace(/ gh/gi, " hr");
+    syllables = syllables.replace(/ dh/gi, " th");
     return syllables;
   }
 
@@ -181,11 +190,11 @@ class SwahiliParser {
   static parseSentenceIntoSyllables(sentence) {
     sentence = sentence.toLowerCase();
 
-    let syllablesOfSentence = '';
-    const delimeter = ' ';
+    let syllablesOfSentence = "";
+    const delimeter = " ";
     let syllablesOfWord = [];
-    const words = sentence.split(' ');
-    syllablesOfSentence += delimeter
+    const words = sentence.split(" ");
+    syllablesOfSentence += delimeter;
 
     for (let word of words) {
       syllablesOfWord = this.parseWordIntoSyllables(word);
@@ -205,25 +214,53 @@ class SwahiliParser {
   }
 }
 
-/************************************************************************** */
+/************************************************************************/
+// Checking to see if the user has Indonesian TTS enabled on their browser.
+// If they do not, do not allow any TTS since it will default to English (which is awful)
 
-let oldSentence = 'The first sentence of all time!!1!';
+const timeout = waitInMilSecs =>
+  new Promise(resolve => setTimeout(resolve, waitInMilSecs));
+
+async function loadGetVoices() {
+  const voices = speechSynthesis.getVoices();
+  await timeout(3000);
+}
+
+let indonesianIsSupported = false;
+
+loadGetVoices().then(() => {
+  voices = speechSynthesis.getVoices();
+
+  for (let voice of voices) {
+    if (voice.lang === "id" || voice.lang === "id-ID") {
+      indonesianIsSupported = true;
+    }
+  }
+});
+
+/*********************************************************************** */
+// Listen for Swahili text and then output it as a SpeechSynthesis utterance
+
+let oldSentence = "The first sentence of all time!!1!";
 
 // listen for a message sent from content, and then output the desired text
-chrome.runtime.onMessage.addListener(function (request) {
-  if (oldSentence === '' || oldSentence !== request.toSay) {
+chrome.runtime.onMessage.addListener(function(request) {
+  if (
+    indonesianIsSupported &&
+    (oldSentence === "" || oldSentence !== request.toSay)
+  ) {
     oldSentence = request.toSay;
 
     // if the user scrolls over a new word, cut all
     // audio for the previous word(s)
-    if (oldSentence !== '') {
+    if (oldSentence !== "") {
       speechSynthesis.cancel();
     }
-    
+
     const msg = new SpeechSynthesisUtterance();
-    msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay)
-    msg.lang = 'id';
-    msg.rate = '0.80';
+    msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay);
+    msg.lang = "id-ID";
+    msg.rate = "0.80";
     speechSynthesis.speak(msg);
   }
 });
