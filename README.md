@@ -1,4 +1,4 @@
-# Duolingo Swahili+
+# Duolingo Swahili+ #
 Chrome extension which provides audio recordings for the Swahili exercises on 
 Duolingo.
 
@@ -48,8 +48,10 @@ I strongly encourage anyone to try to improve the extension via pull-requests, b
 3. Select "Pack Extension"
 4. Select the previously cloned directory as the "Extension root directory"
 5. Click "PACK EXTENSION"
-6. Enable the extension, and click refresh for good measure
-7. All done! Whenever you make a new change to the repository, simply refresh the extension to get the changes to take effect
+6. Click "Load Unpacked"
+7. Select the same folder as before
+8. Enable the extension, and click refresh for good measure
+9. All done! Whenever you make a new change to the repository, simply refresh the extension to get the changes to take effect
 
 ### Testing on Firefox ###
 1. Clone the repository
@@ -57,6 +59,16 @@ I strongly encourage anyone to try to improve the extension via pull-requests, b
 3. Click "Load Temporary Add-on"
 4. Click any file within the previously cloned directory
 5. All done! Whenever you make a new change to the repository, simply refresh the extension to get the changes to take effect
+
+### Testing on Opera ###
+1. Clone the repository
+2. Navigate to `opera:extensions` within Opera
+3. Click "Developer Mode"
+4. Click "Pack Extension..."
+5. Select the previously cloned directory as the "Extension root directory"
+6. Click "Load Unpacked Extension..."
+7. Select the same folder as before
+8. All done! Whenever you make a new change to the repository, simply refresh the extension to get the changes to take effect
 
 
 ## License ##
