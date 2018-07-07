@@ -87,7 +87,7 @@ const observer = new MutationObserver(async function(mutations) {
       // short wait to filter out any "noise" mutations that occur before the
       // test page fully loads
       if (document.body.innerText.search(/write this in english/gi)) {
-        await timeout(400);
+        await timeout(500);
       }
 
       // This is where the test sentence is located in the DOM
@@ -115,12 +115,12 @@ const observer = new MutationObserver(async function(mutations) {
       // finally, send the array of words to the background script to be
       // output as audio
       if (oldSentence !== sentenceString) {
-        // if ((document.body.innerText.search(/Correct solution/gi) === -1) &&
-        //     (document.body.innerText.search(/you are correct/gi) === -1))
-        // {
+        if ((document.body.innerText.search(/Correct solution/gi) === -1) &&
+            (document.body.innerText.search(/you are correct/gi) === -1))
+        {
         oldSentence = sentenceString;
         chrome.runtime.sendMessage({ toSay: sentenceString }, function() {});
-        // }
+        }
 
         // the proper CSS selector to extract the individial words of the
         // sentence

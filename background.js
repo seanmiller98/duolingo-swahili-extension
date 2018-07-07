@@ -132,6 +132,7 @@ class SwahiliParser {
     // various consonant sounds
     syllables = syllables.replace(/we /gi, "weh ");
     syllables = syllables.replace(/ke /gi, "keh ");
+    syllables = syllables.replace(/ki /gi, "kih ");
     syllables = syllables.replace(/ hi/gi, "hih");
     syllables = syllables.replace(/m /gi, "m");
     syllables = syllables.replace(/n /gi, "n");
