@@ -222,22 +222,24 @@ class SwahiliParser {
 const timeout = waitInMilSecs =>
   new Promise(resolve => setTimeout(resolve, waitInMilSecs));
 
-async function loadGetVoices() {
-  const voices = speechSynthesis.getVoices();
-  await timeout(3000);
-}
-
-let indonesianIsSupported = false;
-
-loadGetVoices().then(() => {
-  voices = speechSynthesis.getVoices();
-
-  for (let voice of voices) {
-    if (voice.lang === "id" || voice.lang === "id-ID") {
-      indonesianIsSupported = true;
-    }
+  async function loadGetVoices() {
+    const voices = speechSynthesis.getVoices();
+    speechSynthesis.getVoices();
+    await timeout(3000);
   }
-});
+
+  let indonesianIsSupported = false;
+  let supportedIndonesianVersion = false;
+
+   loadGetVoices().then(() => {
+    voices = speechSynthesis.getVoices();
+     for (let voice of voices) {
+      if (voice.lang === "id" || voice.lang === "id-ID") {
+        indonesianIsSupported = true;
+        supportedIndonesianVersion = voice.lang;
+      }
+    }
+  });
 
 /************************************************************************/
 // Listen for Swahili text and then output it as a SpeechSynthesis utterance
@@ -260,7 +262,7 @@ chrome.runtime.onMessage.addListener(function(request) {
 
     const msg = new SpeechSynthesisUtterance();
     msg.text = SwahiliParser.parseSentenceIntoSyllables(request.toSay);
-    msg.lang = "id-ID";
+    msg.lang = supportedIndonesianVersion;
     msg.rate = "0.80";
     speechSynthesis.speak(msg);
   }
