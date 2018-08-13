@@ -265,5 +265,6 @@ chrome.runtime.onMessage.addListener(function(request) {
     msg.lang = supportedIndonesianVersion;
     msg.rate = "0.80";
     speechSynthesis.speak(msg);
+    console.log(msg.text);
   }
 });

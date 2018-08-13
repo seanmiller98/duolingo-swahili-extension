@@ -86,9 +86,7 @@ const observer = new MutationObserver(async function(mutations) {
     if (isSwahiliChallenge) {
       // short wait to filter out any "noise" mutations that occur before the
       // test page fully loads
-      if (document.body.innerText.search(/write this in english/gi)) {
-        await timeout(500);
-      }
+      await timeout(500);
 
       // This is where the test sentence is located in the DOM
       const targetNode = document.querySelector(
