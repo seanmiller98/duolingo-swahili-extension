@@ -117,6 +117,7 @@ class SwahiliParser {
    * Indonesian TTS can be tricked into pronouncing it properly
    */
   static indonesianify(syllables) {
+    syllables = " " + syllables;
     // 'ng' sound
     syllables = syllables.replace(/ ngw/gi, "ng gu");
     syllables = syllables.replace(/ nga/gi, "ng ga");
@@ -134,8 +135,8 @@ class SwahiliParser {
     syllables = syllables.replace(/ke /gi, "keh ");
     syllables = syllables.replace(/ki /gi, "kih ");
     syllables = syllables.replace(/ hi/gi, "hih");
-    syllables = syllables.replace(/m /gi, "m");
-    syllables = syllables.replace(/n /gi, "n");
+    syllables = syllables.replace(/ m /gi, " mh ");
+    syllables = syllables.replace(/ n /gi, " nh ");
     syllables = syllables.replace(/ chw/gi, " cw");
     syllables = syllables.replace(/ pw/gi, " pu");
     syllables = syllables.replace(/ ks/gi, " cksi");
